@@ -1,0 +1,21 @@
+{
+  "name": "cordova-plugin-warehouse-device-admin",
+  "version": "1.0.0",
+  "description": "Cordova plugin for enabling Android Device Admin and Kiosk mode features.",
+  "cordova": {
+    "id": "cordova-plugin-warehouse-device-admin",
+    "platforms": [
+      "android"
+    ]
+  },
+  "keywords": [
+    "cordova",
+    "plugin",
+    "deviceadmin",
+    "kiosk",
+    "warehouse",
+    "android"
+  ],
+  "author": "Perfectress US",
+  "license": "MIT"
+}
