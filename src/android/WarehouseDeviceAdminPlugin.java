@@ -13,37 +13,27 @@ import org.json.JSONException;
 
 public class WarehouseDeviceAdminPlugin extends CordovaPlugin {
 
-    private static final String ACTION_ACTIVATE_ADMIN = "activateAdmin";
-    private static final String ACTION_START_KIOSK = "startKiosk";
-    private static final String ACTION_STOP_KIOSK = "stopKiosk";
-
-    private DevicePolicyManager dpm;
-    private ComponentName adminComponent;
-
-    @Override
-    protected void pluginInitialize() {
-        Context context = cordova.getActivity().getApplicationContext();
-        dpm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-        adminComponent = new ComponentName(context, WarehouseDeviceAdminReceiver.class);
-    }
-
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         Activity activity = cordova.getActivity();
+        Context context = activity.getApplicationContext();
+        DevicePolicyManager dpm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+        ComponentName adminComponent = new ComponentName(context, WarehouseDeviceAdminReceiver.class);
 
-        if (ACTION_ACTIVATE_ADMIN.equals(action)) {
+        if ("activateAdmin".equals(action)) {
             if (!dpm.isAdminActive(adminComponent)) {
                 Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
                 intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
-                cordova.getActivity().startActivity(intent);
-                callbackContext.success("Requested device admin activation");
+                intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "Enable device admin to use kiosk mode.");
+                activity.startActivity(intent);
+                callbackContext.success("Device admin activation requested");
             } else {
                 callbackContext.success("Already device admin");
             }
             return true;
         }
 
-        if (ACTION_START_KIOSK.equals(action)) {
+        if ("startKiosk".equals(action)) {
             if (dpm.isDeviceOwnerApp(activity.getPackageName())) {
                 dpm.setLockTaskPackages(adminComponent, new String[]{activity.getPackageName()});
                 activity.startLockTask();
@@ -54,7 +44,7 @@ public class WarehouseDeviceAdminPlugin extends CordovaPlugin {
             return true;
         }
 
-        if (ACTION_STOP_KIOSK.equals(action)) {
+        if ("stopKiosk".equals(action)) {
             activity.stopLockTask();
             callbackContext.success("Kiosk mode stopped");
             return true;

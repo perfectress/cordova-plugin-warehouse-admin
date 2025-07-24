@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin id="cordova-plugin-warehouse-device-admin" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-warehouse-device-admin" version="1.0.0"
+        xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
   <name>Warehouse Device Admin</name>
-  <description>Cordova plugin adding DeviceAdminReceiver for kiosk mode</description>
+  <description>Device admin + kiosk mode plugin</description>
   <license>MIT</license>
   <keywords>cordova,deviceadmin,kiosk</keywords>
 
-  <engines>
-    <engine name="cordova" version=">=9.0.0" />
-  </engines>
+  <js-module src="www/WarehouseDeviceAdminPlugin.js" name="WarehouseDeviceAdminPlugin">
+    <clobbers target="WarehouseDeviceAdminPlugin" />
+  </js-module>
 
   <platform name="android">
     <source-file src="src/android/WarehouseDeviceAdminReceiver.java" target-dir="src/com/perfectress/warehouse" />
     <source-file src="src/android/WarehouseDeviceAdminPlugin.java" target-dir="src/com/perfectress/warehouse" />
-    <resource-file src="src/android/res/xml/device_admin.xml" target="app/src/main/res/xml/device_admin.xml" />
 
-    <config-file target="app/src/main/AndroidManifest.xml" parent="/manifest/application">
+    <resource-file src="src/android/res/xml/device_admin.xml" target="res/xml/device_admin.xml" />
+
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
       <receiver android:name="com.perfectress.warehouse.WarehouseDeviceAdminReceiver"
                 android:label="@string/app_name"
                 android:permission="android.permission.BIND_DEVICE_ADMIN">
@@ -25,11 +29,6 @@
         </intent-filter>
       </receiver>
     </config-file>
-
-    <config-file target="res/xml/config.xml" parent="/*">
-      <feature name="WarehouseDeviceAdminPlugin">
-        <param name="android-package" value="com.perfectress.warehouse.WarehouseDeviceAdminPlugin" />
-      </feature>
-    </config-file>
   </platform>
+
 </plugin>
