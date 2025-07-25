@@ -1,4 +1,4 @@
-package com.perfectress.warehouse;
+package com.perfectress.warehousem;
 
 import android.app.admin.DeviceAdminReceiver;
 
